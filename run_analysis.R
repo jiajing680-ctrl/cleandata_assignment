@@ -9,7 +9,7 @@ test_x<-fread("./UCI HAR Dataset/test/X_test.txt")
 colnames(test_x)<-features$V2
 
 ## select out the colummn about mean and sd value of each measurement
-col_mean<-grep("mean()",features$V2)
+col_mean<-grep("mean()",features$V2,fixed=TRUE)
 col_std<-grep("std",features$V2)
 col_select<- sort(c(col_mean,col_std))
 
@@ -66,3 +66,4 @@ mean_calculate<-data_final_frame%>% group_by(subject,activity,variable)%>% summa
 colnames(mean_calculate)<-c("subject","activity","variable","mean_value")
 ## get the tidy form for step 5
 tidy_frame2_mean_value<-spread(mean_calculate,variable,mean_value)
+

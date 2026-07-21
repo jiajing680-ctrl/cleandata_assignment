@@ -51,19 +51,14 @@ train_data_all<-cbind(subject_train,train_data)
 data_all<-rbind(test_data_all,train_data_all)
 ## finish the step 4
  
-## get the data of mean, remove the sd value
-mean_select<-grep("mean",names(data_all))
-data_clean_select<-select(data_all, mean_select)
-## add the data of subject and activity
-data_clean_select$subject<-data_all$subject
-data_clean_select$activity<-data_all$activity
-##reshape the form of data_clean_select
-unique_variable<-grep("mean",names(data_clean_select),value=TRUE)
-data_final<-data_clean_select %>% melt(id.vars=c("subject","activity"),measure.vars=unique_variable)
+
+##reshape the form of data_all
+unique_variable<-unique(c(names(data_all[,-c(1,68)])))
+data_final<-data_all %>% melt(id.vars=c("subject","activity"),measure.vars=unique_variable)
 ## get the mean value of each variable,and rename the column
 data_final_frame<-as_tibble(data_final)
 mean_calculate<-data_final_frame%>% group_by(subject,activity,variable)%>% summarize(mean(value))
-colnames(mean_calculate)<-c("subject","activity","variable","mean_value")
+colnames(mean_calculate)<-c("subject","activity","variable","average_value")
 ## get the tidy form for step 5
-tidy_frame2_mean_value<-spread(mean_calculate,variable,mean_value)
+tidy_frame2_mean_value<-spread(mean_calculate,variable,average_value)%>% print
 
